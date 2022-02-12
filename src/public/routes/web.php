@@ -1,10 +1,9 @@
 <?php
 
+use App\Http\Controllers\PostsController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
-use App\Models\Post;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,32 +16,6 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-    return view('posts', [
-        'posts' => Post::latest()->get(),
-        'categories' => Category::all()
-    ]);
-});
+Route::get('/', [PostsController::class, 'index'])->name('home');
 
-
-Route::get('/test', function (){
-    dd('Hi, there! this is the new route Ive just created');
-});
-
-Route::get('posts/{post:slug}', function (Post $post){
-    return view('post', [
-        'post' => $post
-    ]);
-});
-
-Route::get('categories/{category:slug}', function (Category $category) {
-    return view('posts', [
-        'posts' => $category->posts
-    ]);
-});
-
-Route::get('authors/{author:username}', function (User $author) {    
-    return view('posts', [
-        'posts' => $author->posts
-    ]);
-});
+Route::get('posts/{post:slug}', [PostsController::class, 'show']);
